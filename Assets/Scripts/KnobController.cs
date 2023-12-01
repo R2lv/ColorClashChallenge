@@ -7,10 +7,11 @@ public class KnobController : MonoBehaviour
     public Image pointer;
     public Transform handle;
     public Image[] wheelButtons;
-    
+
     private bool _isCursorInsideKnob = true;
     private bool _isMouseDown = false;
-    
+
+    public Color32[] colorList;
     // Start is called before the first frame update
     private void Start()
     {
@@ -20,7 +21,8 @@ public class KnobController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !_isMouseDown) {
+        if (Input.GetMouseButtonDown(0) && !_isMouseDown)
+        {
             var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (GetComponent<CircleCollider2D>().OverlapPoint(pos))
             {
@@ -57,8 +59,9 @@ public class KnobController : MonoBehaviour
     private void AnglePicked(float angle)
     {
         var index = Math.Floor(angle / 45);
-        Debug.Log(angle);
-        Debug.Log(index);
+        //Debug.Log("angle = " + angle);
+        Debug.Log("inde ==== " + index);
+        CheckColor(index);
     }
 
     private void RotateKnob()
@@ -68,7 +71,24 @@ public class KnobController : MonoBehaviour
         handle.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
     }
 
-    private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {
+    private float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
+    {
         return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg + 90;
+    }
+
+    public void CheckColor(double colornumber)
+    {
+        //if()
+
+        if (colornumber == GameManager.instance.noOfColor)
+        {
+            Debug.Log("Next" + colornumber);
+            GameManager.instance.OnAnswer(true);
+        }
+        else
+        {
+            Debug.Log("MissLeft" + GameManager.instance.noOfColor);
+            GameManager.instance.OnAnswer(false);
+        }
     }
 }

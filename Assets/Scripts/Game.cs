@@ -5,14 +5,16 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
-    public TileManager tileManager;
-    
+    //public TileManager tileManager;
+
+    public Wheel wheel;
+
     [Header("Game settings")]
     public float stageTime;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float timeAcceleration;
     public int misses;
-    
+
     [Header("Slider options")]
     public Slider slider;
     public Image sliderFillImage;
@@ -22,7 +24,7 @@ public class Game : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI missesText;
     public TextMeshProUGUI correctText;
-    
+
     [Header("Text templates")]
     public string missesTextTemplate;
     public string correctTextTemplate;
@@ -32,7 +34,7 @@ public class Game : MonoBehaviour
 
     [Header("Debug")]
     public bool isPlaying = false;
-    
+
     private float _time;
     private int _missesLeft;
     private int _count;
@@ -41,7 +43,7 @@ public class Game : MonoBehaviour
     private void Start()
     {
         StartGame();
-        tileManager.SetOnAnswer(OnAnswer);
+        //tileManager.SetOnAnswer(OnAnswer);
     }
 
     private void StartGame()
@@ -58,7 +60,7 @@ public class Game : MonoBehaviour
     private void NextColor()
     {
         _time = Time.time;
-        tileManager.NextColor();
+        //tileManager.NextColor();
     }
 
     private void OnAnswer(bool isCorrect)
@@ -66,11 +68,13 @@ public class Game : MonoBehaviour
         if (!isCorrect)
         {
             Fail();
-        } else {
+        }
+        else
+        {
             Correct();
         }
 
-        _currentStageTime -= _currentStageTime*timeAcceleration;
+        _currentStageTime -= _currentStageTime * timeAcceleration;
         UpdateUI();
     }
 
@@ -120,6 +124,6 @@ public class Game : MonoBehaviour
     private void Update()
     {
         if (!isPlaying) return;
-        // UpdateTimer();
+        //UpdateTimer();
     }
 }
