@@ -7,7 +7,8 @@ public class Game : MonoBehaviour
 {
     //public TileManager tileManager;
 
-    public Wheel wheel;
+    [Header("GamePlay")]
+    public GameObject gameplay;
 
     [Header("Game settings")]
     public float stageTime;
@@ -108,6 +109,7 @@ public class Game : MonoBehaviour
     {
         gameOver.Display(_count);
         isPlaying = false;
+        
     }
 
     private void UpdateTimer()

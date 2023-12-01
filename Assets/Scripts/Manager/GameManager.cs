@@ -7,8 +7,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public GameObject gameplay;
     public Image mainImage;
-    public Color32[] colorList;
+    public Sprite[] spriteList;
     public int noOfColor;
 
 
@@ -35,6 +36,10 @@ public class GameManager : MonoBehaviour
     [Header("Debug")]
     public bool isPlaying = false;
 
+    [Header("Misses")]
+    public List<Image> heartImage = new List<Image>();
+    public Sprite colseSprite;
+
     public  int _missesLeft;
     private float _time;
     private int _count;
@@ -45,17 +50,18 @@ public class GameManager : MonoBehaviour
         if (instance == null)
             instance = this;
     }
-
-
-
     private void Start()
     {
-        //noOfColor = RandomeNumber();
-        StartGame();
+        //StartGame();
         GameReset();
     }
-
-    private void StartGame()
+    // Update is called once per frame
+    private void Update()
+    {
+        if (!isPlaying) return;
+        UpdateTimer();
+    }
+    public  void StartGame()
     {
         isPlaying = true;
         _missesLeft = misses;
@@ -107,7 +113,11 @@ public class GameManager : MonoBehaviour
     private void UpdateUI()
     {
         Debug.Log(_count.ToString());
-        missesText.text = string.Format(missesTextTemplate, misses - _missesLeft, misses);
+        int nomisses = misses - _missesLeft;
+        for (int i = 0; i < nomisses; i++)
+        {
+            heartImage[i].sprite = colseSprite;
+        }
         correctText.text = string.Format(correctTextTemplate, _count);
     }
 
@@ -115,28 +125,23 @@ public class GameManager : MonoBehaviour
     {
         gameOver.Display(_count);
         isPlaying = false;
+        gameplay.SetActive(false);
     }
 
     private void UpdateTimer()
     {
         slider.value = (Time.time - _time) / _currentStageTime;
-        //sliderFillImage.color = Color.Lerp(sliderStartColor, sliderEndColor, slider.value);
         if (slider.value >= 1)
         {
             OnAnswer(false);
         }
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (!isPlaying) return;
-        UpdateTimer();
-    }
+   
     public void GameReset()
     {
         noOfColor = RandomeNumber();
-        mainImage.color = colorList[noOfColor];
+        mainImage.sprite = spriteList[noOfColor];
     }
 
     public int RandomeNumber()

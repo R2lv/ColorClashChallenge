@@ -82,12 +82,10 @@ public class KnobController : MonoBehaviour
 
         if (colornumber == GameManager.instance.noOfColor)
         {
-            Debug.Log("Next" + colornumber);
             GameManager.instance.OnAnswer(true);
         }
         else
         {
-            Debug.Log("MissLeft" + GameManager.instance.noOfColor);
             GameManager.instance.OnAnswer(false);
         }
     }
