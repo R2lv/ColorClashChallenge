@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject gameplay;
     public Image mainImage;
-    public Sprite[] spriteList;
+    public Color[] ColorList;
     public int noOfColor;
 
 
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public List<Image> heartImage = new List<Image>();
     public Sprite colseSprite;
 
-    public  int _missesLeft;
+    public int _missesLeft;
     private float _time;
     private int _count;
     private float _currentStageTime;
@@ -59,9 +59,9 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (!isPlaying) return;
-        UpdateTimer();
+        //UpdateTimer();
     }
-    public  void StartGame()
+    public void StartGame()
     {
         isPlaying = true;
         _missesLeft = misses;
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         GameReset();
     }
 
-    public  void OnAnswer(bool isCorrect)
+    public void OnAnswer(bool isCorrect)
     {
         if (!isCorrect)
         {
@@ -137,19 +137,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
+
     public void GameReset()
     {
         noOfColor = RandomeNumber();
-        mainImage.sprite = spriteList[noOfColor];
+        mainImage.color = ColorList[noOfColor];
     }
-
     public int RandomeNumber()
     {
         int no = Random.Range(0, 7);
         return no;
     }
 
+    public int pickupColor(int no)
+    {
+        int colorno = Random.Range(0, ColorList.Length);
+        if (colorno == no)
+        {
+            return pickupColor(no);
+        }
+        return pickupColor(colorno);
+    }
 
 }
 
