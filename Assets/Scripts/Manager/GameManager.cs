@@ -1,17 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class WheelColor
+{
+    public Color color;
+    public bool ispickup;
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameObject gameplay;
     public Image mainImage;
-    public Color[] ColorList;
+    public WheelColor[] ColorList;
+    public WheelPart[] PartList;
     public int noOfColor;
 
+    public Color knobSelectColor;
+    public bool isselectColor;
 
     [Header("Game settings")]
     public float stageTime;
@@ -52,14 +63,14 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        //StartGame();
         GameReset();
+        RandomColorAdd();
+        //PartPickUpColor();
     }
-    // Update is called once per frame
     private void Update()
     {
         if (!isPlaying) return;
-        //UpdateTimer();
+        UpdateTimer();
     }
     public void StartGame()
     {
@@ -76,6 +87,7 @@ public class GameManager : MonoBehaviour
     {
         _time = Time.time;
         GameReset();
+
     }
 
     public void OnAnswer(bool isCorrect)
@@ -103,11 +115,15 @@ public class GameManager : MonoBehaviour
             _missesLeft--;
             GameOver();
         }
+        ColorManager.instance.GameReset();
+        RandomColorAdd();
     }
     private void Correct()
     {
         _count++;
         NextColor();
+        ColorManager.instance.GameReset();
+        RandomColorAdd();
     }
 
     private void UpdateUI()
@@ -119,6 +135,7 @@ public class GameManager : MonoBehaviour
             heartImage[i].sprite = colseSprite;
         }
         correctText.text = string.Format(correctTextTemplate, _count);
+        isselectColor = false;
     }
 
     private void GameOver()
@@ -134,30 +151,64 @@ public class GameManager : MonoBehaviour
         if (slider.value >= 1)
         {
             OnAnswer(false);
+            //ColorManager.instance.GameReset();
         }
     }
+    public IEnumerator CheckColor()
+    {
+        yield return new WaitForSeconds(0.4f);
+        if (mainImage.color == knobSelectColor)
+        {
+            OnAnswer(true);
+        }
+        else
+        {
+            OnAnswer(false);
+        }
 
-
+    }
     public void GameReset()
     {
         noOfColor = RandomeNumber();
-        mainImage.color = ColorList[noOfColor];
+        mainImage.color = ColorList[noOfColor].color;
     }
     public int RandomeNumber()
     {
-        int no = Random.Range(0, 7);
+        int no = UnityEngine.Random.Range(0, 7);
         return no;
     }
 
-    public int pickupColor(int no)
+    public void RandomColorAdd()
     {
-        int colorno = Random.Range(0, ColorList.Length);
-        if (colorno == no)
+        for (int i = 0; i < 8; i++)
         {
-            return pickupColor(no);
+            //Color RandomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+            //if (RandomColor == ColorList[i].color)
+            //{
+            //    return;
+            //}
+            //ColorList[i].color = RandomColor;
+
+            //ColorList[i].color = ColorManager.instance.color_P[ColorManager.instance.colornumber[i]].colors;
         }
-        return pickupColor(colorno);
+        for (int i = 0; i < PartList.Length; i++)
+        {
+            ColorList[i].ispickup = false;
+        }
+
+        PartPickUpColor(ColorManager.instance.color_V);
     }
 
+    public void PartPickUpColor(color[] colors)
+    {
+        for (int i = 0; i < PartList.Length; i++)
+        {
+            if (colors[i].isPickup == false)
+            {
+                PartList[i].partImage.color = colors[i].colors;
+                colors[i].isPickup = true;
+            }
+        }
+    }
 }
 

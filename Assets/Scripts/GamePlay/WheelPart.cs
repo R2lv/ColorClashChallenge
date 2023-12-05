@@ -7,16 +7,29 @@ public class WheelPart : MonoBehaviour
 {
     public Image partImage;
     public int colornumber;
+    public GameObject border;
     private void Start()
     {
-        colornumber = GameManager.instance.pickupColor(colornumber);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("knob"))
         {
-            Debug.Log("KonbEnter ========================================");
+            if (GameManager.instance.isselectColor == false)
+            {
+                GameManager.instance.isselectColor = true;
+                GameManager.instance.knobSelectColor = partImage.color;
+                border.SetActive(true);
+                StartCoroutine(GameManager.instance.CheckColor());
+            }
+        }
+    }
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("knob"))
+        { 
+            border.SetActive(false);
         }
     }
 }
