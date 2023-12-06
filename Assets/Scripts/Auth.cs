@@ -1,73 +1,111 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using Firebase;
 using Firebase.Auth;
+using Firebase.Extensions;
 using Google;
 using UnityEngine;
 
 public class Auth : MonoBehaviour
 {
-    public string web_client_id = "785353175115-clvb09rfitgjmf8qvuft0l5r189n5oq0.apps.googleusercontent.com";
+    public string web_client_id;
     private FirebaseAuth _auth;
-    void Start()
+    private FirebaseUser _user;
+
+    private GoogleSignInConfiguration configuration;
+    private DependencyStatus dependencyStatus;
+    private void Awake()
     {
-        _auth = FirebaseAuth.DefaultInstance;
-        if (_auth.CurrentUser == null)
+        configuration = new GoogleSignInConfiguration
         {
-            LogInAnonymously();
+            WebClientId = web_client_id,
+            RequestIdToken = true
+        };
+    }
+    private void Start()
+    {
+        InitializeFirebase();
+    }
+
+    private void InitializeFirebase()
+    {
+        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
+            dependencyStatus = task.Result;
+            if (dependencyStatus == Firebase.DependencyStatus.Available)
+            {
+                _auth = FirebaseAuth.DefaultInstance;
+                //  firestoreController.InitializeFirestore();
+            }
+            else
+            {
+                Debug.Log(
+                  "Could not resolve all Firebase dependencies: " + dependencyStatus);
+            }
+        });
+    }
+
+    public void SigninWithGoogle()
+    {
+        GoogleLogin();
+
+    }
+
+    private void GoogleLogin()
+    {
+        GoogleSignIn.Configuration = configuration;
+        configuration.WebClientId = web_client_id;
+        configuration.UseGameSignIn = false;
+        configuration.RequestIdToken = true;
+        configuration.RequestEmail = true;
+        configuration.RequestProfile = true;
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread((authTask) =>
+        {
+            OnGoogleAuthenticatedFinished(authTask);
+        });
+    }
+
+    private void OnGoogleAuthenticatedFinished(Task<GoogleSignInUser> obj)
+    {
+        if (obj.IsFaulted)
+        {
+            Debug.LogError("Google login Fault ==== " + obj.Result.ToString());
+            return;
+        }
+        else if (obj.IsCanceled)
+        {
+            Debug.Log("Google login cancelled");
+            return;
+        }
+        else
+        {
+            Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(obj.Result.IdToken, null);
+            GoogleFirebaseLogin(credential);
         }
     }
 
-    void LogInAnonymously()
+    private void GoogleFirebaseLogin(Credential credential)
     {
-        _auth.SignInAnonymouslyAsync().ContinueWith(task =>
+        _auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(task =>
         {
-            if (task.IsCanceled) {
-                Debug.LogError("SignInAnonymouslyAsync was canceled.");
+            if (task.IsCanceled)
+            {
+                Debug.Log("Signin Cancelled");
                 return;
             }
-            if (task.IsFaulted) {
-                Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
+            else if (task.IsCanceled)
+            {
+                Debug.Log("Signing Cancelled");
                 return;
             }
 
-            var result = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
+            _user = _auth.CurrentUser;
+
+            Debug.Log("Sucsess   " + _user.UserId + _user.Email + _user.DisplayName);
         });
     }
 
-    
-    public void SignInWithGoogle()
-    {
-        GoogleSignIn.Configuration = new GoogleSignInConfiguration {
-            RequestIdToken = true,
-            WebClientId = web_client_id
-        };
-        
-        
-        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn ();
 
-        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser> ();
-        signIn.ContinueWith (task => {
-            if (task.IsCanceled) {
-                signInCompleted.SetCanceled ();
-            } else if (task.IsFaulted) {
-                signInCompleted.SetException (task.Exception);
-            } else {
 
-                Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential (((Task<GoogleSignInUser>)task).Result.IdToken, null);
-                _auth.CurrentUser.LinkWithCredentialAsync(credential).ContinueWith (authTask => {
-                    if (authTask.IsCanceled) {
-                        signInCompleted.SetCanceled();
-                    } else if (authTask.IsFaulted) {
-                        signInCompleted.SetException(authTask.Exception);
-                    } else {
-                        Debug.Log("Logged in");
-                        signInCompleted.SetResult(((Task<FirebaseUser>)authTask).Result);
-                    }
-                });
-            }
-        });
-    }
 }

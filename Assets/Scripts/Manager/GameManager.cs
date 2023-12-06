@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject gameplay;
     public Image mainImage;
-    public WheelColor[] ColorList;
+    //public WheelColor[] ColorList;
     public WheelPart[] PartList;
     public int noOfColor;
 
@@ -170,45 +170,51 @@ public class GameManager : MonoBehaviour
     public void GameReset()
     {
         noOfColor = RandomeNumber();
-        mainImage.color = ColorList[noOfColor].color;
+        //mainImage.color = ColorManager.instance.color_V[noOfColor];
     }
     public int RandomeNumber()
     {
-        int no = UnityEngine.Random.Range(0, 7);
+        int no = UnityEngine.Random.Range(0, 8);
         return no;
     }
 
     public void RandomColorAdd()
     {
-        for (int i = 0; i < 8; i++)
-        {
-            //Color RandomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
-            //if (RandomColor == ColorList[i].color)
-            //{
-            //    return;
-            //}
-            //ColorList[i].color = RandomColor;
-
-            //ColorList[i].color = ColorManager.instance.color_P[ColorManager.instance.colornumber[i]].colors;
-        }
-        for (int i = 0; i < PartList.Length; i++)
-        {
-            ColorList[i].ispickup = false;
-        }
-
-        PartPickUpColor(ColorManager.instance.color_V);
+        //for (int i = 0; i < 8; i++)
+        //{
+        //Color RandomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+        //if (RandomColor == ColorList[i].color)
+        //{
+        //    return;
+        //}
+        //ColorList[i].color = RandomColor;
+        //ColorList[i].color = ColorManager.instance.color_P[ColorManager.instance.colornumber[i]].colors;
+        //}
+        //for (int i = 0; i < PartList.Length; i++)
+        //{
+        //    ColorList[i].ispickup = false;
+        //}
+        //if()
+        PartPickUpColor(ColorManager.instance.color_C);
     }
 
     public void PartPickUpColor(color[] colors)
     {
         for (int i = 0; i < PartList.Length; i++)
         {
-            if (colors[i].isPickup == false)
-            {
-                PartList[i].partImage.color = colors[i].colors;
-                colors[i].isPickup = true;
-            }
+            PartList[i].partImage.color = colors[randomNumberForColor(colors)].colors;
         }
+        mainImage.color = colors[noOfColor].colors;
+    }
+    public int randomNumberForColor(color[] colors)
+    {
+        int no = UnityEngine.Random.Range(0, colors.Length);
+        if (colors[no].isPickup == true)
+        {
+            return randomNumberForColor(colors);
+        }
+        colors[no].isPickup = true;
+        return no;
     }
 }
 

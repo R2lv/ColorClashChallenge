@@ -33,7 +33,7 @@ public class ColorManager : MonoBehaviour
         for (int i = 0; i < color_P.Length; i++)
         {
             color_P[i].isPickup = false;
-            color_P[i].isPickup = false;
+            color_V[i].isPickup = false;
             color_R[i].isPickup = false;
             color_N[i].isPickup = false;
             color_C[i].isPickup = false;
