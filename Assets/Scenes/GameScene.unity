@@ -1262,7 +1262,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 450
+  m_Radius: 250
 --- !u!114 &125100538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3555,7 +3555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b4c5ec1c31ce27e4ea6d07c773fade82, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 44b9a4a3a35eac1479df9ea91551c06f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6873,7 +6873,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 854966647}
         m_TargetAssemblyTypeName: FirebaseAuthController, Assembly-CSharp
-        m_MethodName: LoginWithGoogle
+        m_MethodName: GoogleSIgnIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7191,7 +7191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aabf446c1efa51140906d32fd8461e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  googleWebApi: 1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com
+  HomePanel: {fileID: 1189788192}
+  dependencyStatus: 0
 --- !u!1 &858529389
 GameObject:
   m_ObjectHideFlags: 0
@@ -8503,6 +8504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplay: {fileID: 249560036}
+  knobcontroller: {fileID: 1788742572}
   mainImage: {fileID: 241948932}
   PartList:
   - {fileID: 1704278350}
@@ -12360,7 +12362,7 @@ MonoBehaviour:
   - {fileID: 433571075}
   - {fileID: 1705328227}
   - {fileID: 500562257}
-  knob: {fileID: 437310392}
+  knob: {fileID: 437310393}
   area: {fileID: 125100538}
   colorList:
   - serializedVersion: 2
@@ -13292,6 +13294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7fd9ca68f9f11642bcf31da4b6712eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 20
+  number: 0
 --- !u!1 &1966339541
 GameObject:
   m_ObjectHideFlags: 0

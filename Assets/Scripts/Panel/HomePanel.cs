@@ -10,4 +10,7 @@ public class HomePanel : MonoBehaviour
         GameManager.instance.StartGame();
         gameObject.SetActive(false);
     }
+
+
+
 }

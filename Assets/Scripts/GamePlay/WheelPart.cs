@@ -20,6 +20,7 @@ public class WheelPart : MonoBehaviour
             {
                 GameManager.instance.isselectColor = true;
                 GameManager.instance.knobSelectColor = partImage.color;
+                GameManager.instance.knobcontroller.knob.color = partImage.color;
                 border.SetActive(true);
                 StartCoroutine(GameManager.instance.CheckColor());
             }
@@ -28,7 +29,7 @@ public class WheelPart : MonoBehaviour
     public void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("knob"))
-        { 
+        {
             border.SetActive(false);
         }
     }

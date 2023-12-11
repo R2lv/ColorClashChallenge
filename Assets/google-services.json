@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1044675717648-ko3fird6v5adc2i97crdnme1k90up49s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.codingarts.colorclashchallenge",
+            "certificate_hash": "63defaab368c8570886e220da487105f2024f0cc"
+          }
+        },
+        {
           "client_id": "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com",
           "client_type": 3
         }

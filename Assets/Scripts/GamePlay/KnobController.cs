@@ -7,7 +7,7 @@ public class KnobController : MonoBehaviour
     public Image pointer;
     public Transform handle;
     public Image[] wheelButtons;
-    public Transform knob;
+    public Image knob;
     public KnobArea area;
 
     private bool _isCursorInsideKnob = true;
@@ -31,16 +31,16 @@ public class KnobController : MonoBehaviour
                 //knob.transform.position = new Vector3(0, pos.y, 0);
                 _isMouseDown = true;
                 _isCursorInsideKnob = true;
-                //pointer.gameObject.SetActive(true);
+                pointer.gameObject.SetActive(true);
             }
         }
 
         if (Input.GetMouseButtonUp(0) && _isMouseDown)
         {
             AnglePicked(handle.rotation.eulerAngles.z);
-            knob.position = this.gameObject.transform.position;
+            knob.transform.position = this.gameObject.transform.position;
             _isMouseDown = false;
-            //pointer.gameObject.SetActive(false);
+            pointer.gameObject.SetActive(false);
         }
 
         if (Input.GetMouseButton(0) && _isMouseDown)
@@ -49,21 +49,21 @@ public class KnobController : MonoBehaviour
 
             if (area.isKnobArea)
             {
-                knob.position = new Vector2(pos.x, pos.y);
+                knob.transform.position = new Vector2(pos.x, pos.y);
             }
             else
             {
-                knob.position =  this.gameObject.transform.position;
+                knob.transform.position =  this.gameObject.transform.position;
             }
             _isCursorInsideKnob = GetComponent<CircleCollider2D>().OverlapPoint(pos);
 
             if (_isCursorInsideKnob)
             {
-                //pointer.gameObject.SetActive(false);
+                pointer.gameObject.SetActive(false);
             }
             else
             {
-                //pointer.gameObject.SetActive(true);
+                pointer.gameObject.SetActive(true);
                 RotateKnob();
             }
         }
@@ -72,9 +72,8 @@ public class KnobController : MonoBehaviour
     private void AnglePicked(float angle)
     {
         var index = Math.Floor(angle / 45);
-        //Debug.Log("angle = " + angle);
         Debug.Log("inde ==== " + index);
-        CheckColor(index);
+        //CheckColor(index);
     }
 
     private void RotateKnob()
@@ -89,17 +88,17 @@ public class KnobController : MonoBehaviour
         return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg + 90;
     }
 
-    public void CheckColor(double colornumber)
-    {
-        //if()
+    //public void CheckColor(double colornumber)
+    //{
+    //    //if()
 
-        if (colornumber == GameManager.instance.noOfColor)
-        {
-            //GameManager.instance.OnAnswer(true);
-        }
-        else
-        {
-            //GameManager.instance.OnAnswer(false);
-        }
-    }
+    //    if (colornumber == GameManager.instance.noOfColor)
+    //    {
+    //        //GameManager.instance.OnAnswer(true);
+    //    }
+    //    else
+    //    {
+    //        //GameManager.instance.OnAnswer(false);
+    //    }
+    //}
 }

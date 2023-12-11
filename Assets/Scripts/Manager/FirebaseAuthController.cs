@@ -1,10 +1,10 @@
+using Firebase;
 using Firebase.Auth;
-using Firebase.Extensions;
-//using Facebook.MiniJSON;
 using Google;
-using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+//using Facebook.MiniJSON;
 using UnityEngine;
 
 public class FirebaseAuthController : MonoBehaviour
@@ -17,237 +17,161 @@ public class FirebaseAuthController : MonoBehaviour
     //private List<string> facebookParams;
     //[SerializeField]
     //private PopupHelper popupPrefab;
-    [SerializeField]
+    //[SerializeField]
+    //private string googleWebApi = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
     private string googleWebApi = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
     //[SerializeField]
     //private LoginManager manager;
-    //[SerializeField]
-    //private AvatarSelector avatarSelector;
 
-    private FirebaseUser user;
-    private FirebaseAuth firebaseAuth;
-    private Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
-    private CancellationToken CancelledMethod;
+
+    public HomePanel HomePanel;
+    //public DependencyStatus dependencyStatus;
+    //public FirebaseAuth auth;
+    //public FirebaseUser user;
+
+    private string Token
+    {
+        get
+        {
+            return PlayerPrefs.GetString("Token", string.Empty);
+        }
+        set
+        {
+            PlayerPrefs.SetString("Token", value);
+        }
+    }
+
+
+    //public  string googleAccessToken = string.Empty;
     private GoogleSignInConfiguration configuration;
-
-    #region Init
-
-    private void Awake()
+    void Start()
     {
-        if (dependencyStatus != Firebase.DependencyStatus.Available)
-            InitializeFirebase();
-        else
-            firebaseAuth = FirebaseAuth.DefaultInstance;
 
-        //InitializeFacebook();
-
-        InitializeGoogle();
-
-        //StartCoroutine(CheckForLoggedInUser());
-
+        //if (!Token.Equals(string.Empty))
+        //{
+        //    //OnSignInSilently();
+        //}
     }
 
-    private void InitializeFirebase()
+    public void GoogleSIgnIn()
     {
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available)
-            {
-                firebaseAuth = FirebaseAuth.DefaultInstance;
-                Debug.Log("FireBAse Autu");
-                //firestoreController.InitializeFirestore();
-            }
-            else
-            {
-                Debug.Log(
-                  "Could not resolve all Firebase dependencies: " + dependencyStatus);
-            }
-        });
+        OnSignIn();
+
     }
 
 
 
-    #endregion
-
-    #region public methods
 
 
-    public void LoginWithGoogle()
-    {
-        //popupPrefab.PopupMessage("Login", "Signing in Please Wait");
-        GoogleLogin();
-    }
+    //[DllImport("__Internal")]
+    //private static extern void OpenOAuthInExternalTab(string url, string callbackFunctionName);
 
-    #endregion
-
-    #region firebaseAPI
-
-    //private Task CreateUserWithEmailAsync(string email, string password)
+    //public void OnApplicationQuit()
     //{
-    //    return firebaseAuth.CreateUserWithEmailAndPasswordAsync(email, password)
-    //      .ContinueWithOnMainThread((task) =>
-    //      {
-    //          if (LogTaskCompletion(task, "User Creation"))
-    //          {
-    //              SendVerificationMail();
-    //          }
-    //          return task;
-    //      }).Unwrap();
+    //    OnSignOut();
+    //    OnDisconnect();
     //}
 
-    //private void SendVerificationMail()
-    //{
-    //    user = firebaseAuth.CurrentUser;
-
-    //    user.SendEmailVerificationAsync().ContinueWithOnMainThread((authTask) =>
-    //    {
-    //        if (LogTaskCompletion(authTask, "Send Password Reset Email"))
-    //        {
-
-    //            Debug.Log("Account Created" + "Confirmation mail Sent. Please check spams folder too!!");
-    //            //CreateFirestoreUser();
-    //        }
-    //    });
-    //}
-
-
-    //private void HandleSignInWithSignInResult(Task<SignInResult> task)
-    //{
-    //    if (LogTaskCompletion(task, "Sign-in"))
-    //    {
-    //        //if (userInputs.rememberCreds.isOn)
-    //        //{
-    //        //    PlayerPrefs.SetString("email", userInputs.loginEmail.text);
-    //        //    PlayerPrefs.SetString("password", userInputs.loginPassword.text);
-    //        //}
-    //        //else
-    //        //{
-    //        //    PlayerPrefs.DeleteKey("email");
-    //        //    PlayerPrefs.DeleteKey("password");
-    //        //}
-
-    //        user = firebaseAuth.CurrentUser;
-
-    //        if (user.IsEmailVerified)
-    //        {
-    //            firestoreController.GetUser(user.UserId, null);
-    //        }
-    //        else
-    //        {
-    //            FirebaseAuth.DefaultInstance.SignOut();
-    //            Debug.Log("User Not Verified" + "Please confirm your email id by clicking on the link sent to your mail");
-    //        }
-    //    }
-    //}
-
-    private void SendPasswordResetEmail(string email)
+    public void OnSignIn()
     {
-        firebaseAuth.SendPasswordResetEmailAsync(email).ContinueWithOnMainThread((authTask) =>
+        GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
-            if (LogTaskCompletion(authTask, "Send Password Reset Email"))
-                Debug.Log("Password Reset" + "Password reset email sent to " + email + ". Please check spam folder");
-        });
-    }
-
-    private bool LogTaskCompletion(Task task, string operation)
-    {
-        bool complete = false;
-
-        if (task.IsCanceled)
-            Debug.Log("Password Reset" + operation + " canceled.");
-
-        else if (task.IsFaulted)
-        {
-            foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
-            {
-                string authErrorCode = "";
-                Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
-                if (firebaseEx != null)
-                {
-                    authErrorCode = String.Format("AuthError.{0}: ",
-                      ((Firebase.Auth.AuthError)firebaseEx.ErrorCode).ToString());
-                }
-                string[] error = exception.ToString().Split(":");
-                Debug.Log("Error" + error[1]);
-            }
-        }
-        else if (task.IsCompleted)
-        {
-            complete = true;
-        }
-        return complete;
-    }
-
-    #endregion
-
-
-    #region Google API
-
-    private void InitializeGoogle()
-    {
-        Debug.Log("Google Web Token  - " + googleWebApi);
-        configuration = new GoogleSignInConfiguration
-        {
-
             WebClientId = googleWebApi,
-            RequestIdToken = true
+            RequestIdToken = true,
+            UseGameSignIn = false
         };
+        AddStatusText("Calling SignIn");
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
+          OnAuthenticationFinished);
     }
 
-    private void GoogleLogin()
+    public void OnSignOut()
+    {
+        AddStatusText("Calling SignOut");
+        GoogleSignIn.DefaultInstance.SignOut();
+    }
+
+    public void OnDisconnect()
+    {
+        AddStatusText("Calling Disconnect");
+        GoogleSignIn.DefaultInstance.Disconnect();
+    }
+
+    internal void OnAuthenticationFinished(Task<GoogleSignInUser> task)
+    {
+        if (task.IsFaulted)
+        {
+            using (IEnumerator<System.Exception> enumerator =
+                    task.Exception.InnerExceptions.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                {
+                    GoogleSignIn.SignInException error =
+                            (GoogleSignIn.SignInException)enumerator.Current;
+                    AddStatusText("Got Error: " + error.Status + " " + error.Message);
+                }
+                else
+                {
+                    AddStatusText("Got Unexpected Exception?!?" + task.Exception);
+                }
+            }
+        }
+        else if (task.IsCanceled)
+        {
+            AddStatusText("Canceled");
+        }
+        else
+        {
+            AddStatusText("Welcome: " + task.Result.DisplayName + "!");
+            Token = task.Result.IdToken;
+            //AddStatusText("Access Token =" +  Token);
+            //HomePanel.OnPlayAsGuest();
+
+        }
+    }
+                                                                                                                                    
+    public void OnSignInSilently()
     {
         GoogleSignIn.Configuration = configuration;
         GoogleSignIn.Configuration.UseGameSignIn = false;
         GoogleSignIn.Configuration.RequestIdToken = true;
-        GoogleSignIn.Configuration.RequestEmail = true;
-        GoogleSignIn.Configuration.RequestProfile = true;
+        AddStatusText("Calling SignIn Silently");
 
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread((authTask) =>
-        {
-            OnGoogleAuthenticatedFinished(authTask);
-        });
+        GoogleSignIn.DefaultInstance.SignInSilently()
+              .ContinueWith(OnAuthenticationFinished);
     }
 
-    private void OnGoogleAuthenticatedFinished(Task<GoogleSignInUser> obj)
+
+    public void OnGamesSignIn()
     {
-        if (obj.IsFaulted)
-        {
-            Debug.LogError("Google login Fault === ");
-            return;
-        }
-        else if (obj.IsCanceled)
-        {
-            Debug.Log("Google login cancelled");
-            return;
-        }
-        else
-        {
-            Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(obj.Result.IdToken, null);
-            GoogleFirebaseLogin(credential);
-        }
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration.UseGameSignIn = true;
+        GoogleSignIn.Configuration.RequestIdToken = false;
+
+        AddStatusText("Calling Games SignIn");
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
+          OnAuthenticationFinished);
     }
 
-    private void GoogleFirebaseLogin(Credential credential)
+    private List<string> messages = new List<string>();
+    void AddStatusText(string text)
     {
-        firebaseAuth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(task =>
+        if (messages.Count == 5)
         {
-            if (task.IsCanceled)
-            {
-                Debug.Log("Signin Cancelled");
-                return;
-            }
-            else if (task.IsCanceled)
-            {
-                Debug.Log("Signing Cancelled");
-                return;
-            }
-
-            user = firebaseAuth.CurrentUser;
-
-            Debug.Log("U=================  " + user.UserId + "E ================== " + user.Email + "D ====================== " + user.DisplayName);
-        });
+            messages.RemoveAt(0);
+        }
+        messages.Add(text);
+        string txt = "";
+        foreach (string s in messages)
+        {
+            txt += "" + s;
+        }
+        Debug.Log("Google Status = " + txt);
     }
-
-    #endregion
 }
+
+
+
+

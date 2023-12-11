@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameObject gameplay;
+    public KnobController knobcontroller;
     public Image mainImage;
     //public WheelColor[] ColorList;
     public WheelPart[] PartList;
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (!isPlaying) return;
-        UpdateTimer();
+        //UpdateTimer();
     }
     public void StartGame()
     {
