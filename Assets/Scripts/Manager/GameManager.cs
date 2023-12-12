@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject gameplay;
     public KnobController knobcontroller;
     public Image mainImage;
+    public Text mainText;
     //public WheelColor[] ColorList;
     public WheelPart[] PartList;
     public int noOfColor;
@@ -196,6 +197,14 @@ public class GameManager : Singleton<GameManager>
             PartList[i].partImage.color = colors[randomNumberForColor(colors)].colors;
         }
         mainImage.color = colors[noOfColor].colors;
+        if (colors[noOfColor].isblckText == true)
+        {
+            mainText.color = Color.black;
+        }
+        else
+        {
+            mainText.color = Color.white;
+        }
     }
     public int randomNumberForColor(color[] colors)
     {

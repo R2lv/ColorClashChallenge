@@ -15,6 +15,9 @@ public class GamePlayPanel : MonoBehaviour
 
     public void setPlayerData(string email, string username, Uri imageUrl)
     {
+        profileImage.gameObject.SetActive(true);
+        userNameText.gameObject.SetActive(true);
+        emailText.gameObject.SetActive(true);
         emailText.text = email;
         userNameText.text = username;
         //profileImage.sprite = imageUrl;

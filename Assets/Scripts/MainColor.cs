@@ -6,4 +6,6 @@ using UnityEngine.UI;
 public class MainColor : MonoBehaviour
 {
     public Image image;
+
+    public Text mainText;
 }

@@ -23,6 +23,7 @@ public class GameOver : MonoBehaviour
 
     public void Display(int colors)
     {
+        SoundManager.Instance.GameOverSound();
         gameObject.SetActive(true);
         gameOverTitle.text = gameOverTitleText;
         gameOverText.text = string.Format(gameOverTextTemplate, colors);
@@ -42,6 +43,7 @@ public class GameOver : MonoBehaviour
 
     public void PlayAgain()
     {
+        SoundManager.Instance.ButtonClickSound();
         SceneManager.LoadScene("GameScene");
     }
 }

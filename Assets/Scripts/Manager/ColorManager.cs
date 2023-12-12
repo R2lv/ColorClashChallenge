@@ -8,6 +8,7 @@ public class color
 {
     public Color colors;
     public bool isPickup;
+    public bool isblckText;
 }
 
 public class ColorManager : MonoBehaviour

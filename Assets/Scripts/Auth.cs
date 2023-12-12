@@ -1,5 +1,6 @@
 using System.Net;
 using System.Threading.Tasks;
+using CandyCoded.HapticFeedback;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
@@ -47,8 +48,9 @@ public class Auth : MonoBehaviour
 
     public void SigninWithGoogle()
     {
+        HapticFeedback.MediumFeedback();
+        SoundManager.Instance.ButtonClickSound();
         GoogleLogin();
-
     }
 
     private void GoogleLogin()
@@ -111,3 +113,4 @@ public class Auth : MonoBehaviour
 
 
 }
+ 
