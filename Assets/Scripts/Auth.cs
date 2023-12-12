@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Auth : MonoBehaviour
 {
-    public string web_client_id;
+    private string web_client_id = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
     private FirebaseAuth _auth;
     private FirebaseUser _user;
 
@@ -103,6 +103,8 @@ public class Auth : MonoBehaviour
             _user = _auth.CurrentUser;
 
             Debug.Log("Sucsess   " + _user.UserId + _user.Email + _user.DisplayName);
+            UIManager.Instance.homePanel.OnGoogleSignUp();
+            UIManager.Instance.gamePlayPanel.setPlayerData(_user.Email, _user.DisplayName, _user.PhotoUrl);
         });
     }
 

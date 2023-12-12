@@ -6935,8 +6935,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 854966647}
-        m_TargetAssemblyTypeName: FirebaseAuthController, Assembly-CSharp
-        m_MethodName: GoogleSIgnIn
+        m_TargetAssemblyTypeName: Auth, Assembly-CSharp
+        m_MethodName: SigninWithGoogle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7251,7 +7251,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 854966643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aabf446c1efa51140906d32fd8461e20, type: 3}
+  m_Script: {fileID: 11500000, guid: 486203c938cf1f749b9fbb039766274c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &858529389

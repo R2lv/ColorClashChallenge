@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">1044675717648</string>
+  <string name="google_storage_bucket" translatable="false">colorclashchallenge.appspot.com</string>
+  <string name="project_id" translatable="false">colorclashchallenge</string>
+  <string name="google_api_key" translatable="false">AIzaSyD905a2-EXNAUPCpClRgXlQIaz2XAGbYus</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD905a2-EXNAUPCpClRgXlQIaz2XAGbYus</string>
+  <string name="google_app_id" translatable="false">1:1044675717648:android:155248a4a3b96da440f895</string>
+  <string name="default_android_client_id" translatable="false">1044675717648-ko3fird6v5adc2i97crdnme1k90up49s.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com</string>
+</resources>

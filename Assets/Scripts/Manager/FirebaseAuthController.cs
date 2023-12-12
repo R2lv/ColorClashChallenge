@@ -55,7 +55,7 @@ public class FirebaseAuthController : MonoBehaviour
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
           OnAuthenticationFinished);
     }
-
+      
     public void OnSignOut()
     {
         AddStatusText("Calling SignOut");
