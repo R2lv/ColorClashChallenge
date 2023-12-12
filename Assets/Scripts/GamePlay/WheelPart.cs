@@ -16,13 +16,13 @@ public class WheelPart : MonoBehaviour
     {
         if (collision.CompareTag("knob"))
         {
-            if (GameManager.instance.isselectColor == false)
+            if (GameManager.Instance.isselectColor == false)
             {
-                GameManager.instance.isselectColor = true;
-                GameManager.instance.knobSelectColor = partImage.color;
-                GameManager.instance.knobcontroller.knob.color = partImage.color;
+                GameManager.Instance.isselectColor = true;
+                GameManager.Instance.knobSelectColor = partImage.color;
+                GameManager.Instance.knobcontroller.knob.color = partImage.color;
                 border.SetActive(true);
-                StartCoroutine(GameManager.instance.CheckColor());
+                StartCoroutine(GameManager.Instance.CheckColor());
             }
         }
     }

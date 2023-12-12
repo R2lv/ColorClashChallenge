@@ -9,25 +9,7 @@ using UnityEngine;
 
 public class FirebaseAuthController : MonoBehaviour
 {
-    //[SerializeField]
-    //private LoginReferences userInputs;
-    //[SerializeField]
-    //private FirestoreController firestoreController;
-    //[SerializeField]
-    //private List<string> facebookParams;
-    //[SerializeField]
-    //private PopupHelper popupPrefab;
-    //[SerializeField]
-    //private string googleWebApi = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
     private string googleWebApi = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
-    //[SerializeField]
-    //private LoginManager manager;
-
-
-    public HomePanel HomePanel;
-    //public DependencyStatus dependencyStatus;
-    //public FirebaseAuth auth;
-    //public FirebaseUser user;
 
     private string Token
     {
@@ -41,37 +23,25 @@ public class FirebaseAuthController : MonoBehaviour
         }
     }
 
-
-    //public  string googleAccessToken = string.Empty;
     private GoogleSignInConfiguration configuration;
-    void Start()
-    {
-
-        //if (!Token.Equals(string.Empty))
-        //{
-        //    //OnSignInSilently();
-        //}
-    }
 
     public void GoogleSIgnIn()
     {
         OnSignIn();
-
     }
-
-
-
-
-
-    //[DllImport("__Internal")]
-    //private static extern void OpenOAuthInExternalTab(string url, string callbackFunctionName);
-
-    //public void OnApplicationQuit()
-    //{
-    //    OnSignOut();
-    //    OnDisconnect();
+    /// <summary>  Use This client_id For Google Web Client id Form Google Services Json
+    ///  "services": {
+    //    "appinvite_service": {
+    //      "other_platform_oauth_client": [
+    //        {
+    //          "client_id": "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com",
+    //          "client_type": 3
+    //        }
+    //      ]
+    //    }
+    //  }
     //}
-
+    /// </summary>
     public void OnSignIn()
     {
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
@@ -124,13 +94,13 @@ public class FirebaseAuthController : MonoBehaviour
         else
         {
             AddStatusText("Welcome: " + task.Result.DisplayName + "!");
+            AddStatusText("Enail: " + task.Result.Email + "!");
             Token = task.Result.IdToken;
-            //AddStatusText("Access Token =" +  Token);
-            //HomePanel.OnPlayAsGuest();
-
+            UIManager.Instance.homePanel.OnGoogleSignUp();
+            UIManager.Instance.gamePlayPanel.setPlayerData(task.Result.Email,task.Result.DisplayName,task.Result.ImageUrl);
         }
     }
-                                                                                                                                    
+
     public void OnSignInSilently()
     {
         GoogleSignIn.Configuration = configuration;

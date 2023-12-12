@@ -12,9 +12,8 @@ public class WheelColor
     public bool ispickup;
 }
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager instance;
     public GameObject gameplay;
     public KnobController knobcontroller;
     public Image mainImage;
@@ -35,12 +34,8 @@ public class GameManager : MonoBehaviour
     public Slider slider;
 
     [Header("UI")]
-    public TextMeshProUGUI missesText;
-    public TextMeshProUGUI correctText;
-
-    [Header("Text templates")]
-    public string missesTextTemplate;
-    public string correctTextTemplate;
+    //public TextMeshProUGUI missesText;
+    public Text correctText;
 
     [Header("Game over UI")]
     public GameOver gameOver;
@@ -57,11 +52,6 @@ public class GameManager : MonoBehaviour
     private int _count;
     private float _currentStageTime;
 
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
     private void Start()
     {
         GameReset();
@@ -135,7 +125,7 @@ public class GameManager : MonoBehaviour
         {
             heartImage[i].sprite = colseSprite;
         }
-        correctText.text = string.Format(correctTextTemplate, _count);
+        correctText.text = _count + " correct";
         isselectColor = false;
     }
 

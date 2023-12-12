@@ -6,11 +6,17 @@ public class HomePanel : MonoBehaviour
 {
     public void OnPlayAsGuest()
     { 
-        GameManager.instance.gameplay.gameObject.SetActive(true);
-        GameManager.instance.StartGame();
+        GameManager.Instance.gameplay.gameObject.SetActive(true);
+        GameManager.Instance.StartGame();
         gameObject.SetActive(false);
     }
 
-
+    public void OnGoogleSignUp()
+    {
+        Debug.Log("GoogleSignUp");
+        GameManager.Instance.gameplay.gameObject.SetActive(true);
+        GameManager.Instance.StartGame();
+        gameObject.SetActive(false);
+    }
 
 }
