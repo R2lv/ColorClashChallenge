@@ -96,8 +96,8 @@ public class FirebaseAuthController : MonoBehaviour
             AddStatusText("Welcome: " + task.Result.DisplayName + "!");
             AddStatusText("Enail: " + task.Result.Email + "!");
             Token = task.Result.IdToken;
-            UIManager.Instance.homePanel.OnGoogleSignUp();
-            UIManager.Instance.gamePlayPanel.setPlayerData(task.Result.Email,task.Result.DisplayName,task.Result.ImageUrl);
+            //UIManager.Instance.homePanel.OnGoogleSignUp();
+            //UIManager.Instance.gamePlayPanel.setPlayerData(task.Result.Email,task.Result.DisplayName,task.Result.ImageUrl);
         }
     }
 

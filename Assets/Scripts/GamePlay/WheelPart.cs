@@ -14,10 +14,11 @@ public class WheelPart : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("knob"))
+        if (collision.CompareTag("knob") && !GameManager.Instance.knobcontroller._isKnobColorPicker)
         {
             if (GameManager.Instance.isselectColor == false)
             {
+                GameManager.Instance.knobcontroller._isKnobColorPicker = true;
                 GameManager.Instance.isselectColor = true;
                 GameManager.Instance.knobSelectColor = partImage.color;
                 GameManager.Instance.knobcontroller.knob.color = partImage.color;

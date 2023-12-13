@@ -101,16 +101,18 @@ public class Auth : MonoBehaviour
                 Debug.Log("Signing Cancelled");
                 return;
             }
-
             _user = _auth.CurrentUser;
 
             Debug.Log("Sucsess   " + _user.UserId + _user.Email + _user.DisplayName);
             UIManager.Instance.homePanel.OnGoogleSignUp();
-            UIManager.Instance.gamePlayPanel.setPlayerData(_user.Email, _user.DisplayName, _user.PhotoUrl);
+            UIManager.Instance.playerProfilePanel.setPlayerData(_user.Email, _user.DisplayName, _user.PhotoUrl);
         });
     }
-
-
-
+    public void LogOut()
+    {
+        _auth.SignOut();
+        UIManager.Instance.homePanel.gameObject.SetActive(true);
+        UIManager.Instance.playerProfilePanel.setPlayerData(null, null, null);
+        UIManager.Instance.playerProfilePanel.gameObject.SetActive(false);
+    }
 }
- 

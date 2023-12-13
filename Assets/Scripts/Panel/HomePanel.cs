@@ -7,7 +7,8 @@ public class HomePanel : MonoBehaviour
 {
     public void OnPlayAsGuest()
     {
-        HapticFeedback.LightFeedback();
+        UIManager.Instance.mode = Mode.guest;
+        HapticFeedback.MediumFeedback();
         SoundManager.Instance.ButtonClickSound();
         GameManager.Instance.gameplay.gameObject.SetActive(true);
         GameManager.Instance.StartGame();
@@ -17,19 +18,17 @@ public class HomePanel : MonoBehaviour
     public void OnGoogleSignUp()
     {
         Debug.Log("GoogleSignUp");
-       
-        GameManager.Instance.gameplay.gameObject.SetActive(true);
-        GameManager.Instance.StartGame();
+        UIManager.Instance.playerProfilePanel.gameObject.SetActive(true);
+        UIManager.Instance.mode = Mode.google;
+        //GameManager.Instance.gameplay.gameObject.SetActive(true);
+        //GameManager.Instance.StartGame();
         gameObject.SetActive(false);
     }
-    public void OnLeaderBoardBtnClick()
-    {
-        HapticFeedback.HeavyFeedback();
-        SoundManager.Instance.ButtonClickSound();
-    }
+ 
 
     public void OnAppleSignUpBtnClick()
     {
+        UIManager.Instance.mode = Mode.apple;
         HapticFeedback.HeavyFeedback();
         SoundManager.Instance.ButtonClickSound();
     }

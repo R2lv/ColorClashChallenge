@@ -11,7 +11,9 @@ public class KnobController : MonoBehaviour
     public KnobArea area;
 
     private bool _isCursorInsideKnob = true;
-    private bool _isMouseDown = false;
+    public bool _isMouseDown = false;
+
+    public bool _isKnobColorPicker = false;
 
     public Color32[] colorList;
     // Start is called before the first frame update
@@ -39,6 +41,7 @@ public class KnobController : MonoBehaviour
         {
             AnglePicked(handle.rotation.eulerAngles.z);
             knob.transform.position = this.gameObject.transform.position;
+            _isKnobColorPicker = false;
             _isMouseDown = false;
             pointer.gameObject.SetActive(false);
         }
@@ -54,6 +57,7 @@ public class KnobController : MonoBehaviour
             else
             {
                 knob.transform.position =  this.gameObject.transform.position;
+                _isKnobColorPicker = false;
             }
             _isCursorInsideKnob = GetComponent<CircleCollider2D>().OverlapPoint(pos);
 

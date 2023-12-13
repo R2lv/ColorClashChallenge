@@ -18,6 +18,8 @@ public class GameManager : Singleton<GameManager>
     public KnobController knobcontroller;
     public Image mainImage;
     public Text mainText;
+
+    public Auth googleAuth;
     //public WheelColor[] ColorList;
     public WheelPart[] PartList;
     public int noOfColor;
@@ -52,7 +54,7 @@ public class GameManager : Singleton<GameManager>
     private float _time;
     private int _count;
     private float _currentStageTime;
-
+    
     private void Start()
     {
         GameReset();
@@ -62,7 +64,7 @@ public class GameManager : Singleton<GameManager>
     private void Update()
     {
         if (!isPlaying) return;
-        //UpdateTimer();
+       //UpdateTimer();
     }
     public void StartGame()
     {

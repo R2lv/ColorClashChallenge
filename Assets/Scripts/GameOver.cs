@@ -44,6 +44,16 @@ public class GameOver : MonoBehaviour
     public void PlayAgain()
     {
         SoundManager.Instance.ButtonClickSound();
-        SceneManager.LoadScene("GameScene");
+        //SceneManager.LoadScene("GameScene");
+        //UIManager.Instance.playerProfilePanel.gameObject.SetActive(true);
+        if (UIManager.Instance.mode == Mode.guest)
+        {
+            SceneManager.LoadScene("GameScene");
+        }
+        else if (UIManager.Instance.mode == Mode.google || UIManager.Instance.mode == Mode.apple)
+        {
+            UIManager.Instance.playerProfilePanel.gameObject.SetActive(true);
+        }
+        Hide();
     }
 }
