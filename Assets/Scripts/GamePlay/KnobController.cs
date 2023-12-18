@@ -49,14 +49,15 @@ public class KnobController : MonoBehaviour
         if (Input.GetMouseButton(0) && _isMouseDown)
         {
             var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
             if (area.isKnobArea)
             {
-                knob.transform.position = new Vector2(pos.x, pos.y);
+                Debug.Log("Pos === " + pos);
+                //if (pos.x <= 0.5f)
+                    knob.transform.position = new Vector2(pos.x, pos.y);
             }
             else
             {
-                knob.transform.position =  this.gameObject.transform.position;
+                knob.transform.position = this.gameObject.transform.position;
                 _isKnobColorPicker = false;
             }
             _isCursorInsideKnob = GetComponent<CircleCollider2D>().OverlapPoint(pos);

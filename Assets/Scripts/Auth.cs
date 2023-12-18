@@ -7,11 +7,18 @@ using Firebase.Extensions;
 using Google;
 using UnityEngine;
 
+
+[System.Serializable]
+public class PlayerScoreData
+{
+    public string playerName;
+    public int score;
+}
 public class Auth : MonoBehaviour
 {
     private string web_client_id = "1044675717648-o4hkgl70ls5psna1o13mlana8f870lji.apps.googleusercontent.com";
     private FirebaseAuth _auth;
-    private FirebaseUser _user;
+    public FirebaseUser _user;
 
     private GoogleSignInConfiguration configuration;
     private DependencyStatus dependencyStatus;
@@ -22,10 +29,10 @@ public class Auth : MonoBehaviour
             WebClientId = web_client_id,
             RequestIdToken = true
         };
+        InitializeFirebase();
     }
     private void Start()
     {
-        InitializeFirebase();
     }
 
     private void InitializeFirebase()
@@ -33,6 +40,7 @@ public class Auth : MonoBehaviour
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             dependencyStatus = task.Result;
+
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
                 _auth = FirebaseAuth.DefaultInstance;
@@ -43,18 +51,49 @@ public class Auth : MonoBehaviour
                 Debug.Log(
                   "Could not resolve all Firebase dependencies: " + dependencyStatus);
             }
+            if (task.IsCompleted)
+            {
+                if (IdToken != string.Empty)
+                {
+                    Debug.Log("IsToken == " + IdToken);
+                    //GoogleLogin();
+                    Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(IdToken, null);
+                    GoogleFirebaseLogin(credential);
+                }
+
+                ScoreManager.Instance.OnStart();
+            }
         });
     }
-
+    public string IdToken
+    {
+        set
+        {
+            PlayerPrefs.SetString("IdToken", value);
+        }
+        get
+        {
+            return PlayerPrefs.GetString("IdToken", null);
+        }
+    }
     public void SigninWithGoogle()
     {
         HapticFeedback.MediumFeedback();
         SoundManager.Instance.ButtonClickSound();
-        GoogleLogin();
+        if (IdToken != string.Empty)
+        {
+            Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(IdToken, null);
+            GoogleFirebaseLogin(credential);
+        }
+        else
+        {
+            GoogleLogin();
+        }
     }
 
     private void GoogleLogin()
     {
+        Debug.Log("Google Login BtnCLick");
         GoogleSignIn.Configuration = configuration;
         configuration.WebClientId = web_client_id;
         configuration.UseGameSignIn = false;
@@ -64,12 +103,14 @@ public class Auth : MonoBehaviour
 
         GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread((authTask) =>
         {
+            Debug.Log("Auth Task" + authTask.ToString());
             OnGoogleAuthenticatedFinished(authTask);
         });
     }
 
     private void OnGoogleAuthenticatedFinished(Task<GoogleSignInUser> obj)
     {
+        Debug.Log("Object == " + obj.Result.Email);
         if (obj.IsFaulted)
         {
             Debug.LogError("Google login Fault ==== " + obj.Result.ToString());
@@ -82,8 +123,12 @@ public class Auth : MonoBehaviour
         }
         else
         {
-            Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(obj.Result.IdToken, null);
+            Debug.Log("Google Login WithTOken");
+            if (IdToken == string.Empty)
+                IdToken = obj.Result.IdToken;
+            Firebase.Auth.Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(IdToken, null);
             GoogleFirebaseLogin(credential);
+            Debug.Log("Result IdToken ======= " + IdToken);
         }
     }
 
@@ -110,9 +155,18 @@ public class Auth : MonoBehaviour
     }
     public void LogOut()
     {
+        IdToken = null;
         _auth.SignOut();
         UIManager.Instance.homePanel.gameObject.SetActive(true);
         UIManager.Instance.playerProfilePanel.setPlayerData(null, null, null);
         UIManager.Instance.playerProfilePanel.gameObject.SetActive(false);
     }
+    public void SetPlayerScore()
+    {
+        Debug.Log("USer Id = " + _user.UserId);
+        Debug.Log("_count = " + GameManager.Instance._count);
+        Debug.Log("_count = " + ScoreManager.Instance.gameObject.name);
+        //ScoreManager.Instance.SetScoreData(_user.UserId, GameManager.Instance._count);
+    }
+
 }

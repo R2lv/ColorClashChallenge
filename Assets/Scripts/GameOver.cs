@@ -25,6 +25,8 @@ public class GameOver : MonoBehaviour
     {
         SoundManager.Instance.GameOverSound();
         gameObject.SetActive(true);
+        Debug.Log("User.");
+        //GameManager.Instance.googleAuth.SetPlayerScore();
         gameOverTitle.text = gameOverTitleText;
         gameOverText.text = string.Format(gameOverTextTemplate, colors);
         int per = colors * 10 / 7;

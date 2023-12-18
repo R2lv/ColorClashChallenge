@@ -49,22 +49,24 @@ public class GameManager : Singleton<GameManager>
     [Header("Misses")]
     public List<Image> heartImage = new List<Image>();
     public Sprite colseSprite;
+    public Sprite heartSprite;
 
     public int _missesLeft;
     private float _time;
-    private int _count;
+    public int _count;
     private float _currentStageTime;
     
     private void Start()
     {
         GameReset();
         RandomColorAdd();
+
         //PartPickUpColor();
     }
     private void Update()
     {
         if (!isPlaying) return;
-       //UpdateTimer();
+        UpdateTimer();
     }
     public void StartGame()
     {
@@ -137,6 +139,10 @@ public class GameManager : Singleton<GameManager>
         gameOver.Display(_count);
         isPlaying = false;
         gameplay.SetActive(false);
+        for (int i = 0; i < heartImage.Count; i++)
+        {
+            heartImage[i].sprite = heartSprite;
+        }
     }
 
     private void UpdateTimer()
